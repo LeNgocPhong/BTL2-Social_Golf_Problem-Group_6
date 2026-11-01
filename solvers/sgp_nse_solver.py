@@ -22,3 +22,37 @@ def encode_unique_group_assignment(solver, vpool, n, g, w):
     for k1 in range(1,g):
         for k2 in range(k1+1, g+1):
             solver.add_clause([-get_G_var(vpool, i, k1, l), -get_G_var(vpool, i, k2, l)])
+
+def encode_group_size_nsc(solver, vpool, n, g, p, w):
+
+    for k in range(1,g+1):
+        for l in range(1, w+1):
+
+            for i in range(1, n):
+                solver.add_clause([-get_G_var(vpool, i, k, l), get_R_var(vpool, i, 1, k, l)])
+
+            for i in range(1, p+1):
+                solver.add_clause([get_G_var(vpool, i, k, l), -get_R_var(vpool, i, i, k, l)])
+
+            for i in range(2, n):
+                for j in range(1, min(i-1, p) + 1):
+                    solver.add_clause([-get_R_var(vpool, i-1, j, k, l), get_R_var(vpool, i, j, k, l)])
+
+                for j in range(2, min(i, p) + 1):
+                    solver.add_clause([-get_G_var(vpool, i, k, l), -get_R_var(vpool, i-1, j-1, k, l), get_R_var(vpool, i, j, k, l)])
+
+                for j in range (1, min(i-1, p) + 1):
+                    solver.add_clause([get_G_var(vpool, i, k, l), get_R_var(vpool, i-1, j, k, l), -get_R_var(vpool, i, j, k, l)])
+
+                for j in range (2, min(i,p)+1):
+                    solver.add_clause([get_R_var(vpool, i-1, j-1, k, l), -get_R_var(vpool, i, j, k, l)])
+
+            if p==1:
+                solver.add_clause([get_R_var(vpool, n-1, 1, k, l), get_G_var(vpool, n, k, l)])
+            else:
+                solver.add_clause([get_R_var(vpool, n-1, p, k, l), get_G_var(vpool, n, k, l)])
+                solver.add_clause([get_R_var(vpool, n-1, p, k, l), get_R_var(vpool, n-1, p-1, k, l)])
+
+            for i in range(p + 1, n+1):
+                solver.add_clause([-get_G_var(vpool, i, k, l), -get_R_var(vpool, i-1, p, k, l)])
+                

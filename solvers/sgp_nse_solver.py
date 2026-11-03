@@ -1,3 +1,5 @@
+import time
+from threading import Timer
 from pysat.solvers import Glucose3
 from pysat.formula import IDPool
 
@@ -89,7 +91,8 @@ def extract_and_print_schedule(model, vpool, n, g, p, w):
             week_groups.append(group_players)
         print(f"Tuần {l:2d}: {week_groups}")
 
-def solve_social_golfer_problem(g, p, w):
+def solve_sgp_sat_nse(g, p, w, time_limit=300.0):
+    t_start = time.perf_counter()
     n = g*p
     vpool = IDPool()
     solver = Glucose3()
@@ -100,18 +103,27 @@ def solve_social_golfer_problem(g, p, w):
     encode_symmetry_breaking_sb1(solver, vpool, g, p)
     encode_symmetry_breaking_sb2(solver, vpool, g, p, w)
 
-    is_sat = solver.solve()
-    if is_sat:
-        print("Kết quả: SATISFIABLE (Tìm thấy lời giải hợp lệ!)")
-        model = solver.get_model()
-        extract_and_print_schedule(model, vpool, n, g, p, w)
+    encode_time = time.perf_counter() - t_start
+    remaining_time = max(0.01, time_limit - encode_time)
+
+    timer = Timer(remaining_time, lambda s: s.interrupt(), [solver])
+    timer.start()
+
+    t_solve_start = time.perf_counter()
+    is_sat = solver.solve_limited(expect_interrupt=True)
+    solve_time = time.perf_counter() - t_solve_start
+    timer.cancel()
+
+    if is_sat is True:
+        res_status = "SAT"
+    elif is_sat is False:
+        res_status = "UNSAT"
     else:
-        print("Kết quả: UNSATISFIABLE (Không tồn tại lịch thi đấu thỏa mãn!)")
-
+        res_status = "TIMEOUT"
     solver.delete()
-    return is_sat
-
-if __name__ == "__main__":
-    solve_social_golfer_problem(g=5, p=3, w=5)
-
-
+    return {
+        "status": res_status,
+        "encode_time": encode_time,
+        "solve_time": solve_time,
+        "total_time": encode_time + solve_time
+    }

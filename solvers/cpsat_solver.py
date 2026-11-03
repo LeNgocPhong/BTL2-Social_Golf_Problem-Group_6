@@ -27,14 +27,18 @@ def solve_sgp_cpsat(g, p, w, time_limit=300.0):
     # 4. Unique Pairings: Cặp (i, j) gặp nhau tối đa 1 lần
     for i in range(1, n):
         for j in range(i + 1, n + 1):
-            meetings = []
+            same_group_weeks = []
             for l in range(1, w + 1):
+                # Biến cùng_nhóm ở tuần l: m_l == 1 nếu i và j cùng nhóm ở tuần l
+                m_l = model.NewBoolVar(f"same_{i}_{j}_{l}")
                 for k in range(1, g + 1):
-                    m_ijkl = model.NewBoolVar(f"M_{i}_{j}_{k}_{l}")
-                    # G[i,k,l] AND G[j,k,l] => m_ijkl
-                    model.AddBoolOr([G[i, k, l].Not(), G[j, k, l].Not(), m_ijkl])
-                    meetings.append(m_ijkl)
-            model.AddAtMostOne(meetings)
+                    # Nếu cả i và j cùng ở nhóm k tuần l thì m_l bắt buộc phải bằng 1:
+                    # G[i,k,l] + G[j,k,l] <= 1 + m_l
+                    model.Add(G[i, k, l] + G[j, k, l] <= 1 + m_l)
+                same_group_weeks.append(m_l)
+            
+            # Cặp (i, j) chỉ được chung nhóm tối đa 1 tuần trong suốt giải đấu
+            model.Add(sum(same_group_weeks) <= 1)
 
     # 5. Symmetry Breaking SB1 & SB2
     for k in range(1, g + 1):

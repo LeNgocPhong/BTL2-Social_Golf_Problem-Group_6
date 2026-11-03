@@ -32,13 +32,16 @@ def solve_sgp_gurobi(g, p, w, time_limit=300.0):
     # 4. Unique Pairings (Tuyến tính hóa bằng biến phụ M)
     for i in range(1, n):
         for j in range(i + 1, n + 1):
-            meetings = []
+            m_l = []
             for l in range(1, w + 1):
+                # m biểu thị cặp (i, j) gặp nhau ở tuần l (chỉ phụ thuộc i, j, l)
+                m = model.addVar(vtype=GRB.BINARY, name=f"M_{i}_{j}_{l}")
                 for k in range(1, g + 1):
-                    m = model.addVar(vtype=GRB.BINARY)
-                    model.addConstr(G[i, k, l] + G[j, k, l] - m <= 1)
-                    meetings.append(m)
-            model.addConstr(gp.quicksum(meetings) <= 1)
+                    # Nếu cả i và j đều ở nhóm k tuần l thì m bắt buộc phải bằng 1
+                    model.addConstr(m >= G[i, k, l] + G[j, k, l] - 1)
+                m_l.append(m)
+            # Tổng số tuần cặp (i, j) gặp nhau không vượt quá 1
+            model.addConstr(gp.quicksum(m_l) <= 1)
 
     # 5. Symmetry Breaking SB1 & SB2
     for k in range(1, g + 1):

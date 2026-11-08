@@ -24,9 +24,9 @@ def plot_grouped_bar_comparison(df):
     )
 
     ax.set_yscale("log")
-    ax.set_ylabel("Total Solving Time (s) [Log Scale]")
-    ax.set_xlabel("SGP Instances (g-p-w)")
-    ax.set_title("Execution Time Comparison: NSE-NSC vs. CP-SAT vs. Gurobi")
+    ax.set_ylabel("Tổng thời gian giải (giây)")
+    ax.set_xlabel("Các trường hợp SGP (g-p-w)")
+    ax.set_title("So sánh thời gian thực thi: NSE-NSC, CP-SAT và Gurobi")
     ax.legend(title="Method", bbox_to_anchor=(1.02, 1), loc="upper left")
 
     cns.savefig("results/plots/1_instance_barplot_log.pdf")
@@ -63,9 +63,9 @@ def plot_cactus_curve(df):
     )
 
     ax.set_yscale("log")
-    ax.set_xlabel("Number of Solved Instances")
-    ax.set_ylabel("Time Limit (s) [Log Scale]")
-    ax.set_title("Cactus Plot of Solver Performance")
+    ax.set_xlabel("Số lượng trường hợp đã giải quyết")
+    ax.set_ylabel("Giới hạn thời gian (giây)")
+    ax.set_title("Biểu đồ (Cactus Plot) về hiệu năng của bộ giải")
     ax.legend(title="Method", loc="upper left")
 
     cns.savefig("results/plots/2_cactus_plot.pdf")
@@ -98,8 +98,8 @@ def plot_time_distribution_boxplot(df):
 
     ax.set_yscale("log")
     ax.set_xlabel("")
-    ax.set_ylabel("Total Time (s) [Log Scale]")
-    ax.set_title("Runtime Distribution Across Solvers")
+    ax.set_ylabel("Tổng thời gian (giây)")
+    ax.set_title("Phân bổ thời gian chạy giữa các bộ giải")
     plt.xticks(rotation=15)
 
     cns.savefig("results/plots/3_runtime_boxplot.pdf")

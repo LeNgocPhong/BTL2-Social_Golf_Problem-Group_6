@@ -29,8 +29,8 @@ def plot_grouped_bar_comparison(df):
     ax.set_title("So sánh thời gian thực thi: NSE-NSC, CP-SAT và Gurobi")
     ax.legend(title="Method", bbox_to_anchor=(1.02, 1), loc="upper left")
 
-    cns.savefig("results/plots/1_instance_barplot_log.pdf")
-    cns.savefig("results/plots/1_instance_barplot_log.png")
+    cns.savefig("BTL2-Social_Golf_Problem-Group_6/results/plots/1_instance_barplot_log.pdf")
+    cns.savefig("BTL2-Social_Golf_Problem-Group_6/results/plots/1_instance_barplot_log.png")
     plt.close()
 
 
@@ -68,8 +68,8 @@ def plot_cactus_curve(df):
     ax.set_title("Biểu đồ (Cactus Plot) về hiệu năng của bộ giải")
     ax.legend(title="Method", loc="upper left")
 
-    cns.savefig("results/plots/2_cactus_plot.pdf")
-    cns.savefig("results/plots/2_cactus_plot.png")
+    cns.savefig("BTL2-Social_Golf_Problem-Group_6/results/plots/2_cactus_plot.pdf")
+    cns.savefig("BTL2-Social_Golf_Problem-Group_6/results/plots/2_cactus_plot.png")
     plt.close()
 
 
@@ -102,14 +102,14 @@ def plot_time_distribution_boxplot(df):
     ax.set_title("Phân bổ thời gian chạy giữa các bộ giải")
     plt.xticks(rotation=15)
 
-    cns.savefig("results/plots/3_runtime_boxplot.pdf")
-    cns.savefig("results/plots/3_runtime_boxplot.png")
+    cns.savefig("BTL2-Social_Golf_Problem-Group_6/results/plots/3_runtime_boxplot.pdf")
+    cns.savefig("BTL2-Social_Golf_Problem-Group_6/results/plots/3_runtime_boxplot.png")
     plt.close()
 
 
 if __name__ == "__main__":
     os.makedirs("results/plots", exist_ok=True)
-    df_results = pd.read_csv("results/benchmark_results.csv")
+    df_results = pd.read_csv("BTL2-Social_Golf_Problem-Group_6/results/benchmark_results.csv")
 
     plot_grouped_bar_comparison(df_results)
     plot_cactus_curve(df_results)

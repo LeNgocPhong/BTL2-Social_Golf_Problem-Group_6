@@ -54,7 +54,7 @@ def main():
             })
 
             # Lưu ngay sau mỗi lần chạy để tránh mất dữ liệu nếu chương trình bị ngắt
-            pd.DataFrame(records).to_csv("results/benchmark_results.csv", index=False)
+            pd.DataFrame(records).to_csv("BTL2-Social_Golf_Problem-Group_6/results/benchmark_results.csv", index=False)
 
 
 if __name__ == "__main__":

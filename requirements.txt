@@ -1,0 +1,13 @@
+# Core Optimization & Constraint Solvers
+gurobipy>=10.0.0
+ortools>=9.6.0
+python-sat>=0.1.7.dev26
+
+# Data Processing & Benchmarking
+pandas>=2.0.0
+numpy>=1.24.0
+
+# Academic Visualization & Plotting
+matplotlib>=3.7.0
+seaborn>=0.12.0
+cnsplots>=0.1.0
